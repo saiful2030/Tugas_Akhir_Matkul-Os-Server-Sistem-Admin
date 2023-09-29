@@ -14,6 +14,7 @@ Web server adalah perangkat lunak yang menyediakan layanan dalam bentuk data. Fu
 - [Nginx](https://www.nginx.com/)
 - [Mysql](https://www.mysql.com/)
 - [Php](https://www.php.net/)
+- [PhpMyAdmin](https://www.phpmyadmin.net/)
 
 
 ## Update Perkembangan
