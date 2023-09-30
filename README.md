@@ -29,6 +29,8 @@ Langkah 1 : Install Nginx
 
 ```sh
 sudo apt update
+```
+```sh
 sudo apt install nginx
 ```
 Langkah 2 : Setting Firewall
