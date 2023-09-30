@@ -18,8 +18,8 @@ Web server adalah perangkat lunak yang menyediakan layanan dalam bentuk data. Fu
 
 ## Update Perkembangan
 
-- 28/09/2023 - Intalasi [Ubuntu Server 20](https://releases.ubuntu.com/focal/) di VirtualBox
-- 30/09/2023 - Intalasi [Nginx](https://www.nginx.com/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
+- 28/09/2023 - Instalasi [Ubuntu Server 20](https://releases.ubuntu.com/focal/) di VirtualBox
+- 30/09/2023 - Instalasi [Nginx](https://www.nginx.com/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
 
 ## Install Nginx
 
