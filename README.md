@@ -19,5 +19,5 @@ Web server adalah perangkat lunak yang menyediakan layanan dalam bentuk data. Fu
 
 ## Update Perkembangan
 
-- 28/09/2023 - Intalasi ubuntu server 20 di VirtualBox
+- 28/09/2023 - Intalasi [Ubuntu Server 20](https://releases.ubuntu.com/focal/) di VirtualBox
 
