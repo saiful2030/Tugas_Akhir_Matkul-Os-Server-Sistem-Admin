@@ -59,7 +59,8 @@ Mengindikasikan lalu lintas HTTP mana yang diizinkan:
 ```sh
 Output
 Status: active
-
+```
+```sh
 To                         Action      From
 --                         ------      ----
 OpenSSH                    ALLOW       Anywhere                  
