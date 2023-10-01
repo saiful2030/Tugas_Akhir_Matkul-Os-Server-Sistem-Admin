@@ -14,26 +14,31 @@ Web server adalah perangkat lunak yang menyediakan layanan dalam bentuk data. Fu
 - [Nginx](https://www.nginx.com/)
 - [Mysql](https://www.mysql.com/)
 - [Php](https://www.php.net/)
+- [VirtualBox](https://www.virtualbox.org/)
 
 
 ## Update Perkembangan
 
-- 28/09/2023 - Instalasi [Ubuntu Server 20](https://releases.ubuntu.com/focal/) di VirtualBox
+- 28/09/2023 - Intalasi [Ubuntu Server 20](https://releases.ubuntu.com/focal/) di [VirtualBox](https://www.virtualbox.org/)
 - 30/09/2023 - Instalasi [Nginx](https://www.nginx.com/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
+- 01/10/2023 - Instalasi [Php](https://www.php.net/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
+-
 
 ## Install Nginx
 
 Nginx tersedia di repositori asali Ubuntu, maka kita dimungkinkan untuk menginstalnya dari repositori ini menggunakan sistem pengemasan `apt`.
 
-Langkah 1 : Install Nginx
+Langkah 1 : Update Ubuntu Server
 
 ```sh
 sudo apt update
 ```
+Langkah 2 : Install Nginx
+
 ```sh
 sudo apt install nginx
 ```
-Langkah 2 : Setting Firewall
+Langkah 3 : Setting Firewall
 
 ```sh
 sudo ufw app list
@@ -68,7 +73,7 @@ Nginx HTTP                 ALLOW       Anywhere
 OpenSSH (v6)               ALLOW       Anywhere (v6)             
 Nginx HTTP (v6)            ALLOW       Anywhere (v6)
 ```
-Langkah 3 : Memeriksa Server Web
+Langkah 4 : Memeriksa Server Web
 
 ```sh
 systemctl status nginx
@@ -86,7 +91,59 @@ Output
            ├─2369 nginx: master process /usr/sbin/nginx -g daemon on; master_process on;
            └─2380 nginx: worker process
 ```
+## Install Php
 
+PHP adalah singkatan dari PHP: Hypertext Preprocessor adalah bahasa skrip sumber terbuka yang banyak digunakan oleh pengembang web untuk pengembangan web. PHP banyak digunakan untuk membuat banyak proyek seperti GUI, website dinamis, dan lain-lain..
+
+Langkah 1 : Update & Upgrade Ubuntu Server
+
+```sh
+sudo apt update
+```
+```sh
+sudo apt upgrade
+```
+Langkah 2 : Tambahkan PPA ondrej/php
+
+```sh
+sudo add-apt-repository ppa:ondrej/php
+```
+Untuk menginstal PHP untuk Nginx, gunakan salah satu perintah berikut:
+- Untuk PHP 7.4 :
+```sh
+sudo apt install php7.4-fpm -y
+```
+- Untuk PHP 8.1 :
+ ```sh
+sudo apt install php8.1-fpm -y
+```
+Restart layanan Nginx untuk menerapkan perubahan
+```sh
+sudo systemctl restart nginx
+```
+Selanjutnya aktifkan dukungan PHP
+```sh
+sudo nano /etc/nginx/sites-available/default
+```
+Tambahkan kode berikut:
+Ganti <version>dengan versi PHP Anda.
+```sh
+server{
+  # . . . existing configuration
+  location ~ \.php$ {
+    include snippets/fastcgi-php.conf;
+    fastcgi_pass unix:/run/php/php<version>-fpm.sock;
+  }
+}
+```
+Terakhir, restart Nginx di Ubuntu dan muat ulang PHP:
+
+```sh
+sudo systemctl restart nginx
+```
+```sh
+sudo systemctl reload php<version_number>-fpm
+```
 
 
 
