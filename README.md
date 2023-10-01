@@ -106,15 +106,7 @@ Langkah 2 : Install PHP 7.4
 ```sh
 apt install php-phpdbg php-fpm php-curl php-gd php-imap php-interbase php-intl php-ldap php-readline php-pspell php-tidy php-xmlrpc php-json php-sybase php-mysql php-opcache php-bz2 php-mbstring php-xml php-enchant php-gmp php-soap php-zip php-bcmath php-pdo -y
 ```
-Langkah 3 : Start PHP-FPM
-```sh
-systemctl start php-fpm
-```
-Langkah 4 : Aktifkan PHP-FPM
-```sh
-systemctl enable php-fpm
-```
-Langkah 5 : Periksa versi PHP
+Langkah 3 : Periksa versi PHP
 ```sh
 php -v
 ```
