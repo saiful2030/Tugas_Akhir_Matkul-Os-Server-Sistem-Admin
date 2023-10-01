@@ -22,7 +22,6 @@ Web server adalah perangkat lunak yang menyediakan layanan dalam bentuk data. Fu
 - 28/09/2023 - Intalasi [Ubuntu Server 20](https://releases.ubuntu.com/focal/) di [VirtualBox](https://www.virtualbox.org/)
 - 30/09/2023 - Instalasi [Nginx](https://www.nginx.com/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
 - 01/10/2023 - Instalasi [Php](https://www.php.net/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
--
 
 ## Install Nginx
 
@@ -103,46 +102,28 @@ sudo apt update
 ```sh
 sudo apt upgrade
 ```
-Langkah 2 : Tambahkan PPA ondrej/php
-
+Langkah 2 : Install PHP 7.4 
 ```sh
-sudo add-apt-repository ppa:ondrej/php
+apt install php-phpdbg php-fpm php-curl php-gd php-imap php-interbase php-intl php-ldap php-readline php-pspell php-tidy php-xmlrpc php-json php-sybase php-mysql php-opcache php-bz2 php-mbstring php-xml php-enchant php-gmp php-soap php-zip php-bcmath php-pdo -y
 ```
-Untuk menginstal PHP untuk Nginx, gunakan salah satu perintah berikut:
-- Untuk PHP 7.4 :
+Langkah 3 : Start PHP-FPM
 ```sh
-sudo apt install php7.4-fpm -y
+systemctl start php-fpm
 ```
-- Untuk PHP 8.1 :
- ```sh
-sudo apt install php8.1-fpm -y
-```
-Restart layanan Nginx untuk menerapkan perubahan
+Langkah 4 : Aktifkan PHP-FPM
 ```sh
-sudo systemctl restart nginx
+systemctl enable php-fpm
 ```
-Selanjutnya aktifkan dukungan PHP
+Langkah 5 : Periksa versi PHP
 ```sh
-sudo nano /etc/nginx/sites-available/default
+php -v
 ```
-Tambahkan kode berikut:
-Ganti <version>dengan versi PHP Anda.
+Output
 ```sh
-server{
-  # . . . existing configuration
-  location ~ \.php$ {
-    include snippets/fastcgi-php.conf;
-    fastcgi_pass unix:/run/php/php<version>-fpm.sock;
-  }
-}
-```
-Terakhir, restart Nginx di Ubuntu dan muat ulang PHP:
-
-```sh
-sudo systemctl restart nginx
-```
-```sh
-sudo systemctl reload php<version_number>-fpm
+PHP 7.4.3 (cli) (built: May 26 2020 12:24:22) ( NTS )
+Copyright (c) The PHP Group
+Zend Engine v3.4.0, Copyright (c) Zend Technologies
+    with Zend OPcache v7.4.3, Copyright (c), by Zend Technologies
 ```
 
 
