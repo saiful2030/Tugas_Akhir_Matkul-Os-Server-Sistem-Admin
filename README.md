@@ -22,6 +22,7 @@ Web server adalah perangkat lunak yang menyediakan layanan dalam bentuk data. Fu
 - 28/09/2023 - Intalasi [Ubuntu Server 20](https://releases.ubuntu.com/focal/) di [VirtualBox](https://www.virtualbox.org/)
 - 30/09/2023 - Instalasi [Nginx](https://www.nginx.com/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
 - 01/10/2023 - Instalasi [Php](https://www.php.net/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
+- 02/10/2023 - Instalasi [Mysql](https://www.mysql.com/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
 
 ## Install Nginx
 
@@ -117,7 +118,51 @@ Copyright (c) The PHP Group
 Zend Engine v3.4.0, Copyright (c) Zend Technologies
     with Zend OPcache v7.4.3, Copyright (c), by Zend Technologies
 ```
+## Install Mysql
 
+Merupakan sistem manajemen basis data open source yang menggunakan perintah dasar atau bahasa pemrograman  berupa Structured Query Language (SQL) yang sangat populer di dunia teknologi. MySQL sangat berguna sebagai database.
+
+Langkah 1 : Update & Upgrade Ubuntu Server
+
+```sh
+sudo apt update
+```
+```sh
+sudo apt upgrade
+```
+Langkah 2 : Instal MySQL
+
+```sh
+sudo apt install mysql-server
+```
+Jika Anda hanya ingin terhubung ke server MySQL jarak jauh daripada menghosting database di mesin Anda, instal Klien MySQL saja dengan menjalankan:
+```sh
+sudo apt install mysql-client
+```
+Periksa apakah MySQL berhasil diinstal dengan menjalankan:
+```sh
+mysql --version
+```
+Langkah 3 : Mengamankan MySQL
+Amankan akun pengguna MySQL Anda dengan otentikasi kata sandi dengan menjalankan skrip keamanan yang disertakan:
+```sh
+sudo mysql_secure_installation
+```
+Masukkan kata sandi Anda dan jawab `Y` ketika ditanya apakah Anda ingin melanjutkan pengaturan `VALIDATE PASSWORD` komponen.
+Pilih salah satu dari tiga tingkat validasi kata sandi:
+- 0- Rendah . Kata sandi berisi minimal 8 karakter.
+- 1- Sedang . Kata sandi berisi minimal 8 karakter, termasuk angka, karakter huruf campuran, dan karakter khusus.
+- 2- Kuat . Kata sandi berisi setidaknya 8 karakter, termasuk angka, karakter huruf campuran, dan karakter khusus, dan membandingkan kata sandi dengan file kamus.
+
+Langkah 4 : Periksa Layanan MySQL
+Verifikasi bahwa server MySQL berjalan
+```sh
+sudo systemctl status mysql
+```
+Langkah 5 : Masuk ke Server MySQL
+```sh
+sudo mysql -u root
+```
 
 
 
