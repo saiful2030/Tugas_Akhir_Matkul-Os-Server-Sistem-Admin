@@ -10,11 +10,12 @@ Web server adalah perangkat lunak yang menyediakan layanan dalam bentuk data. Fu
 
 ## Resource
 
+- [VirtualBox](https://www.virtualbox.org/)
 - [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
 - [Nginx](https://www.nginx.com/)
 - [Mysql](https://www.mysql.com/)
 - [Php](https://www.php.net/)
-- [VirtualBox](https://www.virtualbox.org/)
+- [Bind9](https://bind9.net/)
 
 
 ## Update Perkembangan
@@ -23,6 +24,7 @@ Web server adalah perangkat lunak yang menyediakan layanan dalam bentuk data. Fu
 - 30/09/2023 - Instalasi [Nginx](https://www.nginx.com/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
 - 01/10/2023 - Instalasi [Php](https://www.php.net/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
 - 02/10/2023 - Instalasi [Mysql](https://www.mysql.com/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
+- 03/10/2023 - Instalasi [Bind9](https://bind9.net/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
 
 ## Install Nginx
 
@@ -163,12 +165,90 @@ Langkah 5 : Masuk ke Server MySQL
 ```sh
 sudo mysql -u root
 ```
+## Install Bind9
 
+Berkeley Internet Name Domain versi 9 atau  disingkat  Bind9 adalah  aplikasi Linux yang dapat digunakan sebagai server DNS. Hingga artikel ini diterbitkan, Bind9 merupakan software yang paling banyak digunakan di Internet. Selain itu, Bind9 juga digunakan sebagai server DNS di sebagian besar distribusi Linux.
 
+Langkah 1 : Update & Upgrade Ubuntu Server
 
+```sh
+sudo apt update
+```
+```sh
+sudo apt upgrade
+```
+Langkah 2 : Instal Bind9
 
-
-
+```sh
+sudo apt install bind9
+```
+Memeriksa apakah BIND9 berfungsi.
+```sh
+nslookup google.com 127.0.0.1
+```
+Output
+```sh
+Server:		127.0.0.1
+Address:	127.0.0.1#53
+```
+```sh
+Non-authoritative answer:
+Name: google.com
+Address: 64.233.164.138
+...
+```
+Langkah 3 : Konfigurasi Bind9
+Mengkonfigurasinya sesuai dengan tujuan penggunaan
+```sh
+sudo ufw allow Bind9
+```
+File konfigurasi utama bernama.conf.options 
+```sh
+sudo nano /etc/bind/named.conf.options
+```
+Perintah "listen-on" memungkinkan untuk menentukan jaringan yang akan dilayani oleh server DNS.
+```sh
+listen-on {
+10.10.10.0/24;
+10.1.0.0/16;
+...
+};
+```
+Bind9 hanya mengizinkan kueri lokal secara default. Tambahkan alamat IP yang diperlukan ke direktif "izinkan kueri" atau "apa pun;" untuk mengizinkan semua permintaan.
+```sh
+allow-query { any; };
+```
+Forwarder berisi alamat IP server DNS yang menjadi tujuan pengalihan
+```sh
+forwarders {
+8.8.8.8;
+8.8.4.4;
+};
+```
+Simpan dan tutup file. Periksa konfigurasinya:
+```sh
+sudo named-checkconf
+```
+Mulai ulang layanan agar perubahan diterapkan.
+```sh
+sudo systemctl restart bind9
+```
+Langkah 4 : Periksa Layanan Bind9
+Untuk memeriksa apakah server DNS berfungsi dengan benar, masukkan perintah berikut di komputer jarak jauh lainnya. Ganti dns-server-ip-address dengan alamat IP server DNS.
+```sh
+nslookup ubuntu.com dns-server-ip-address
+```
+Output
+```sh
+Server:		dns-server-ip-address
+Address:		dns-server-ip-address#53
+```
+```sh
+Non-authoritative answer:
+Name: ubuntu.com
+Address: 91.189.88.181
+...
+```
 
 
 
