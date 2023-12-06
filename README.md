@@ -16,6 +16,8 @@ Web server adalah perangkat lunak yang menyediakan layanan dalam bentuk data. Fu
 - [Mysql](https://www.mysql.com/)
 - [Php](https://www.php.net/)
 - [Bind9](https://bind9.net/)
+- [phpmyadmin](https://www.phpmyadmin.net/)
+- [admin panel](https://github.com/yolanmees/Spikster)
 
 
 ## Update Perkembangan
@@ -25,6 +27,8 @@ Web server adalah perangkat lunak yang menyediakan layanan dalam bentuk data. Fu
 - 01/10/2023 - Instalasi [Php](https://www.php.net/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
 - 02/10/2023 - Instalasi [Mysql](https://www.mysql.com/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
 - 03/10/2023 - Instalasi [Bind9](https://bind9.net/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
+- 05/12/2023 - Instalasi [phpmyadmin](https://www.phpmyadmin.net/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
+- 06/12/2023 - Instalasi [admin panel](https://github.com/yolanmees/Spikster) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
 
 ## Install Nginx
 
@@ -250,7 +254,78 @@ Address: 91.189.88.181
 ...
 ```
 
+## Install phpMyAdmin
 
+PhpMyAdmin adalah salah satu software gratis yang ditulis dalam bahasa PHP dan merupakan software yang paling populer digunakan untuk mengelola tabel dan data pada database melalui web
+
+Langkah 1 : Update Ubuntu Server
+
+```sh
+sudo apt update
+```
+Langkah 2 : Install phpMyAdmin
+
+```sh
+apt install phpmyadmin
+```
+Langkah 3 : Buat file baru untuk file konfigurasi phpmyadmin
+
+```sh
+nano /etc/nginx/snippets/phpmyadmin.conf
+```
+Paste script dibawah ini  ke dalam file phpmyadmin.conf
+```sh
+location /phpmyadmin {
+     root /usr/share/;
+     index index.php index.html index.htm;
+     location ~ ^/phpmyadmin/(.+\.php)$ {
+         try_files $uri =404;
+         root /usr/share/;
+         fastcgi_pass unix:/run/php/php8.0(php ver name)-fpm.sock;
+         fastcgi_index index.php;
+         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+         include /etc/nginx/fastcgi_params;
+     }
+
+               location ~* ^/phpmyadmin/(.+\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))$ {
+         root /usr/share/;
+     }
+
+ }
+```
+Langkah 4 : buka file /etc/nginx/sites-available/default
+
+```sh
+nano /etc/nginx/sites-available/default
+```
+Tambahkan konfigurasi include snippets/phpmyadmin.conf; di dalam block server{}
+```sh
+include snippets/phpmyadmin.conf;
+```
+Langkah 5 : Restart nginx
+
+```sh
+systemctl restart nginx
+```
+
+## Install Admin Pannel
+
+admin panel server biasanya berupa antarmuka pengguna grafis (GUI) atau antarmuka pengguna berbasis web yang memungkinkan administrator sistem atau pengelola server untuk mengelola dan mengendalikan server.
+ Panel Administrasi Server menyediakan berbagai fitur  yang memungkinkan administrator  melakukan tugas manajemen, pemantauan, dan konfigurasi di server.
+
+
+
+Langkah 1 : Update Ubuntu Server
+
+```sh
+sudo apt update
+```
+Langkah 2 : Install admin panel
+
+```sh
+wget -O - https://raw.githubusercontent.com/yolanmees/Spikster/master/go.sh | bash
+```
+pastikan ports: 22, 80 dan 443 telah terbuka
 
 
 
