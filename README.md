@@ -18,6 +18,7 @@ Web server adalah perangkat lunak yang menyediakan layanan dalam bentuk data. Fu
 - [Bind9](https://bind9.net/)
 - [phpmyadmin](https://www.phpmyadmin.net/)
 - [admin panel](https://github.com/yolanmees/Spikster)
+- [SSL](https://id.wikipedia.org/wiki/Keamanan_Lapisan_Transportasi)
 
 
 ## Update Perkembangan
@@ -29,6 +30,7 @@ Web server adalah perangkat lunak yang menyediakan layanan dalam bentuk data. Fu
 - 03/10/2023 - Instalasi [Bind9](https://bind9.net/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
 - 05/12/2023 - Instalasi [phpmyadmin](https://www.phpmyadmin.net/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
 - 06/12/2023 - Instalasi [admin panel](https://github.com/yolanmees/Spikster) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
+- 12/12/2023 - Instalasi [SSL](https://id.wikipedia.org/wiki/Keamanan_Lapisan_Transportasi) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
 
 ## Install Nginx
 
@@ -326,6 +328,137 @@ Langkah 2 : Install admin panel
 wget -O - https://raw.githubusercontent.com/yolanmees/Spikster/master/go.sh | bash
 ```
 pastikan ports: 22, 80 dan 443 telah terbuka
+
+## Install SSL
+
+protokol keamanan yang digunakan untuk mengamankan komunikasi data antara dua sistem, seperti antara browser web dan server web, atau antara aplikasi dan server. SSL menciptakan saluran aman dengan mengenkripsi data yang dikirimkan antara klien dan server.
+
+Langkah 1 : Update Ubuntu Server
+
+```sh
+sudo apt update
+```
+Langkah 2 : Install Open SSl
+
+```sh
+sudo apt install openssl
+```
+Langkah 3 : Membuat self-signed SSL certificate
+
+```sh
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
+```
+Informasi yang harus Anda isi adalah sebagai berikut:
+
+- country name
+- state 
+- locality name 
+- organization name
+- organizational unit name 
+- common name 
+- email address 
+
+Langkah 4 : Membuat file dhparam.pem
+
+```sh
+sudo openssl dhparam -out /etc/nginx/dhparam.pem 4096
+```
+Langkah 5 : Konfigurasi Nginx SSL
+```sh
+sudo nano /etc/nginx/snippets/self-signed.conf
+```
+salinlah path file key dan file sertifikat berikut ini pada file self-signed.conf:
+```sh
+ssl_certificate /etc/ssl/certs/nginx-selfsigned.crt;
+ssl_certificate_key /etc/ssl/private/nginx-selfsigned.key;
+```
+membuat file dengan nama ssl-params.conf
+```sh
+sudo nano /etc/nginx/snippets/ssl-params.conf
+```
+salinlah kode konfigurasi berikut ini pada file tersebut:
+```sh
+ssl_protocols TLSv1.3;
+ssl_prefer_server_ciphers on;
+ssl_dhparam /etc/nginx/dhparam.pem;
+ssl_ciphers EECDH+AESGCM:EDH+AESGCM;
+ssl_ecdh_curve secp384r1;
+ssl_session_timeout  10m;
+ssl_session_cache shared:SSL:10m;
+ssl_session_tickets off;
+ssl_stapling on;
+ssl_stapling_verify on;
+resolver 8.8.8.8 8.8.4.4 valid=300s;
+resolver_timeout 5s;
+# Disable strict transport security for now. You can uncomment the following
+# line if you understand the implications.
+#add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";
+add_header X-Frame-Options DENY;
+add_header X-Content-Type-Options nosniff;
+add_header X-XSS-Protection "1; mode=block";
+```
+backup file konfigurasi
+```sh
+sudo cp /etc/nginx/sites-available/saifulaji.com /etc/nginx/sites-available/saifulaji.com.bak
+```
+membuka file konfigurasi server block
+```sh
+sudo nano /etc/nginx/sites-available/saifulaji.com
+```
+Tambahkan kode konfigurasi Nginx HTTPS (port 443)
+```sh
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    include snippets/self-signed.conf;
+    include snippets/ssl-params.conf;
+
+root /var/www/saifulaji.com/html;
+        index index.html index.htm index.nginx-debian.html;
+
+  server_name saifulaji.com www.saifulaji.com;
+
+  location / {
+                try_files $uri $uri/ =404;
+        }
+}
+```
+tambahkan server block berikut ini setelah tanda tutup kurawal (}) server block Nginx HTTPS:
+```sh
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name saifulaji.com www.saifulaji.com;
+
+    return 302 https://$server_name$request_uri;
+}
+```
+Langkah 6 : Menyesuaikan Firewall
+```sh
+sudo ufw app list
+```
+Anda bisa mengubah profile ufw menjadi Nginx Full dan menghapus Nginx HTTP dengan perintah
+```sh
+sudo ufw allow 'Nginx Full'
+sudo ufw delete allow 'Nginx HTTP'
+```
+Langkah 7 : Mengaktifkan Perubahan Konfigurasi Nginx SSL
+memastikan tidak ada syntax error pada file konfigurasi
+```sh
+sudo nginx -t
+```
+restart Nginx
+```sh
+sudo systemctl restart nginx
+```
+
+
+
+
+
+
+
 
 
 
