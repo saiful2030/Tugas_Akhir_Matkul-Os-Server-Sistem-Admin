@@ -17,7 +17,7 @@ Web server adalah perangkat lunak yang menyediakan layanan dalam bentuk data. Fu
 - [Php](https://www.php.net/)
 - [Bind9](https://bind9.net/)
 - [phpmyadmin](https://www.phpmyadmin.net/)
-- [admin panel](https://github.com/yolanmees/Spikster)
+- [webmin](https://webmin.com/)
 - [SSL](https://id.wikipedia.org/wiki/Keamanan_Lapisan_Transportasi)
 
 
@@ -29,7 +29,7 @@ Web server adalah perangkat lunak yang menyediakan layanan dalam bentuk data. Fu
 - 02/10/2023 - Instalasi [Mysql](https://www.mysql.com/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
 - 03/10/2023 - Instalasi [Bind9](https://bind9.net/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
 - 05/12/2023 - Instalasi [phpmyadmin](https://www.phpmyadmin.net/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
-- 06/12/2023 - Instalasi [admin panel](https://github.com/yolanmees/Spikster) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
+- 06/12/2023 - Instalasi [webmin](https://webmin.com/) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
 - 12/12/2023 - Instalasi [SSL](https://id.wikipedia.org/wiki/Keamanan_Lapisan_Transportasi) di [Ubuntu Server 20](https://releases.ubuntu.com/focal/)
 
 ## Install Nginx
@@ -312,8 +312,7 @@ systemctl restart nginx
 
 ## Install Admin Pannel
 
-admin panel server biasanya berupa antarmuka pengguna grafis (GUI) atau antarmuka pengguna berbasis web yang memungkinkan administrator sistem atau pengelola server untuk mengelola dan mengendalikan server.
- Panel Administrasi Server menyediakan berbagai fitur  yang memungkinkan administrator  melakukan tugas manajemen, pemantauan, dan konfigurasi di server.
+Webmin adalah panel kontrol manajemen server berbasis web untuk sistem mirip Unix. Webmin memungkinkan pengguna untuk mengonfigurasi internal sistem operasi.
 
 
 
@@ -322,12 +321,26 @@ Langkah 1 : Update Ubuntu Server
 ```sh
 sudo apt update
 ```
-Langkah 2 : Install admin panel
+Langkah 2 : Upgrade Ubuntu Server
 
 ```sh
-wget -O - https://raw.githubusercontent.com/yolanmees/Spikster/master/go.sh | bash
+sudo apt upgrade
 ```
-pastikan ports: 22, 80 dan 443 telah terbuka
+Langkah 3 : Install dependency packages 
+
+```sh
+sudo apt install software-properties-common apt-transport-https
+```
+Langkah 4 : Webmin's GPG key 
+
+```sh
+sudo wget -q http://www.webmin.com/jcameron-key.asc -O- | sudo apt-key add -
+```
+Langkah 5 : Webmin repository 
+
+```sh
+sudo add-apt-repository "deb [arch=amd64] http://download.webmin.com/download/repository sarge contrib"
+```
 
 ## Install SSL
 
