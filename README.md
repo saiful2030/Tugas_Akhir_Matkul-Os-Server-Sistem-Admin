@@ -310,11 +310,9 @@ Langkah 5 : Restart nginx
 systemctl restart nginx
 ```
 
-## Install Admin Pannel
+## Install Wenmin
 
 Webmin adalah panel kontrol manajemen server berbasis web untuk sistem mirip Unix. Webmin memungkinkan pengguna untuk mengonfigurasi internal sistem operasi.
-
-
 
 Langkah 1 : Update Ubuntu Server
 
@@ -341,6 +339,34 @@ Langkah 5 : Webmin repository
 ```sh
 sudo add-apt-repository "deb [arch=amd64] http://download.webmin.com/download/repository sarge contrib"
 ```
+Langkah 6 : install Webmin
+
+```sh
+sudo apt install webmin
+```
+Langkah 7 : periksa status layanan Webmin
+
+```sh
+sudo systemctl status webmin
+```
+Langkah 8 : Konfigurasikan Firewall
+
+```sh
+sudo ufw allow 10000/tcp
+```
+Langkah 9 : firewall
+
+```sh
+sudo ufw reload
+```
+Langkah 10 : Atur kata sandi untuk pengguna root
+
+```sh
+sudo /usr/share/webmin/changepass.pl /etc/webmin root [new password]
+```
+
+
+`akses Webmin dengan https://[your server's IP]:10000/`.
 
 ## Install SSL
 
